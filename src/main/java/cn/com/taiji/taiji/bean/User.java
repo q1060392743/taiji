@@ -34,7 +34,7 @@ public class User implements Serializable {
     private String mobile;
 
     //用户邮箱
-    @Email
+    @Email(message = "邮箱不符合格式")
     private String email;
 
     //用户头像存放路径
