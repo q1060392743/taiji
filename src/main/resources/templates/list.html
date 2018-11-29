@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="#{userUI}"></title>
+    <script th:src="@{/js/jquery-1.8.3.js}"></script>
+    <script>
+        //中文
+        function changeChinese() {
+            window.location.href = "/list?lang=zh_CN";
+        }
+
+        //英文
+        function changeEnglish() {
+            window.location.href = "/list?lang=en_US";
+        }
+
+        function toAdd() {
+            window.location.href = '/toAdd';
+        }
+
+        function edit(id) {
+            window.location.href = '/toEdit/' + id;
+        }
+
+        //删除
+        function dele(id) {
+            $.ajax({
+                url: "/delete/" + id,
+                success: function (data) {
+                    if (data.code === 1) {
+                        alert(data.msg);
+                        window.location.href = "/list";
+                    } else {
+                        alert("删除失败！");
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<button onclick="changeChinese()">中文</button>
+<button onclick="changeEnglish()">English</button>
+
+<table border="1" width="300px" height="300px">
+    <!--表头-->
+    <tr>
+        <th th:text="#{name}"></th>
+        <th th:text="#{age}"></th>
+        <th th:text="#{mobile}"></th>
+        <th th:text="#{email}"></th>
+        <th th:text="#{pic}"></th>
+        <th th:text="#{function}">功能</th>
+    </tr>
+
+    <!--数据-->
+    <tr th:each="user : ${session.userList}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.age}"></td>
+        <td th:text="${user.mobile}"></td>
+        <td th:text="${user.email}"></td>
+        <td><img th:src="@{${user.fileUrl}}"/></td>
+        <td>
+            <button type="button" th:onclick="'javascript:dele(\''+${user.id}+'\')'" th:text="#{delete}">
+            </button>
+            <button type="button" th:onclick="'javascript:edit(\''+${user.id}+'\')'" th:text="#{edit}">
+            </button>
+        </td>
+    </tr>
+
+    <!--添加按钮-->
+    <tr>
+        <td colspan="6">
+            <button th:onclick="'javascript:toAdd()'" style="display: block; margin: 0 auto" th:text="#{add}">
+            </button>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

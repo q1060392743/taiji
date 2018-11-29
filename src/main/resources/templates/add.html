@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--引用jq文件-->
+    <script th:src="@{/js/jquery-1.8.3.js}"></script>
+    <meta charset="UTF-8"/>
+    <title th:text="#{updateUI}"></title>
+    <script>
+        //中文
+        function changeChinese() {
+            var id = $("#id").val();
+            if (id == null || id === "") {
+                window.location.href = "/toAdd?lang=zh_CN";
+            } else {
+                window.location.href = "/toEdit/" + id + "/?lang=zh_CN";
+            }
+        }
+
+        //英语
+        function changeEnglish() {
+            var id = $("#id").val();
+            if (id == null || id === "") {
+                window.location.href = "/toAdd?lang=en_US";
+            } else {
+                window.location.href = "/toEdit/" + id + "/?lang=en_US";
+            }
+        }
+
+        //检查姓名
+        /*<![CDATA[*/
+        function checkName() {
+            var name = $("#name").val();
+            if (name == null || name === "") {
+                alert("姓名不能为空");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        /*]]>*/
+
+        //检查年龄
+        /*<![CDATA[*/
+        function checkAge() {
+            var age = $("#age").val();
+            if (age >= 18 && age <= 100) {
+                return true;
+            } else {
+                alert("请输入18到100岁之间的年龄...");
+                return false;
+            }
+        }
+
+        /*]]>*/
+
+        //检查手机号
+        /*<![CDATA[*/
+        function checkMobile() {
+            var mobile = $("#mobile").val();
+            var mPattern = /^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/;
+            if (mPattern.test(mobile)) {
+                return true;
+            } else {
+                alert("请输入正确的手机号格式");
+                return false;
+            }
+        }
+
+        /*]]>*/
+
+        //检查email
+        function checkEmail() {
+            var email = $("#email").val();
+            var ePattern = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+            if (ePattern.test(email)) {
+                return true;
+            } else {
+                alert("请输入正确的邮箱格式...");
+                return false;
+            }
+        }
+
+
+        //检查
+        /*<![CDATA[*/
+        function check() {
+            if (checkName() === true) {
+                if (checkAge() === true) {
+                    if (checkMobile() === true) {
+                        if (checkEmail() === true)
+                            $("#form").submit();
+                    }
+                }
+            }
+        }
+
+        /*]]>*/
+
+    </script>
+</head>
+<body>
+<button onclick="changeChinese()">中文</button>
+<button onclick="changeEnglish()">English</button>
+<form th:object="${user}" id="form" th:action="@{/add}" method="post" enctype="multipart/form-data">
+    <!--id-->
+    <input type="hidden" id="id" th:field="*{id}"/>
+
+    <!--name-->
+    <label th:text="#{name}">：</label>
+    <input type="text" id="name" th:field="*{name}"/>
+    <span th:errors="*{name}" style="color: red;"></span><br/>
+
+    <!--age-->
+    <label th:text="#{age}">：</label>
+    <input type="text" id="age" th:field="*{age}"/>
+    <span th:errors="*{age}" style="color: red"></span><br/>
+
+    <!--mobile-->
+    <label th:text="#{mobile}">：</label>
+    <input type="text" id="mobile" th:field="*{mobile}"/>
+    <span th:errors="*{mobile}" style="color: red"></span><br/>
+
+    <!--email-->
+    <label th:text="#{email}">：</label>
+    <input type="text" id="email" th:field="*{email}"/>
+    <span th:errors="*{email}" style="color: red"></span><br/>
+
+    <!--file-->
+    <label th:text="#{file}">：</label>
+    <input type="file" id="file" name="file"/><br/>
+    <input th:field="*{fileUrl}" type="hidden"/>
+
+    <!--submit-->
+    <button type="submit" th:text="#{submit}" th:onclick="'javascript:check()'"></button>
+</form>
+</body>
+</html>
