@@ -5,4 +5,4 @@
 
 框架为springboot
 
-用了hibernate-validator后台校验，国际化，删除使用了ajax
+用了hibernate-validator后台校验，国际化，上传文件，删除使用了ajax
